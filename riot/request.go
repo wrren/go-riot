@@ -16,8 +16,8 @@ import (
 //	
 //	Return an error on failure or nil otherwise
 //
-func GetAndUnmarshal(region Region, static bool, endpoint string, version string, key string, path []string, parameters map[string]string, v interface{} ) error {
-	response, err := Get( region, static, endpoint, version, key, pathm parameters )
+func (r Riot) GetAndUnmarshal(static bool, endpoint string, version string, path []string, parameters map[string]string, v interface{}) error {
+	response, err := r.Get(static, endpoint, version, path, parameters)
 
 	if err != nil {
 		return err
@@ -40,8 +40,8 @@ func GetAndUnmarshal(region Region, static bool, endpoint string, version string
 //	
 //	Returns the response to the GET request on success, with a non-nil error on failure
 //
-func Get(region Region, static bool, endpoint string, version string, key string, path []string, parameters map[string]string) (*http.Response, error) {
-	Url, err := URL(region, static, endpoint, version, key, path, parameters)
+func (r Riot) Get(static bool, endpoint string, version string, path []string, parameters map[string]string) (*http.Response, error) {
+	Url, err := URL(r.region, static, endpoint, version, r.key, path, parameters)
 
 	if err != nil {
 		return nil, err

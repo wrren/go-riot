@@ -21,3 +21,7 @@ type Riot struct {
 	key    string
 	region Region
 }
+
+func NewRiot(key string, region Region) *Riot {
+	return &Riot{key, region}
+}

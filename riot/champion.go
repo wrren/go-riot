@@ -16,8 +16,8 @@ type ChampionStatus struct {
 
 type Champion struct {
 	id uint64		`json:"id"`
-	name string
-	title string
+	name string		`json:"name"`
+	title string		`json:"title"`
 	status *ChampionStatus
 }
 
@@ -36,21 +36,38 @@ func NewChampion( id uint64, name string, title string ) *Champion {
 //
 //	Get a list of all champions in the game
 //
-func GetChampions() ( error, []Champion ) {
+func (r Riot) GetChampions() ( error, []Champion ) {
+	var json interface{}
+	champions := make([]Champion, 1)
+	
+	err := r.GetAndUnmarshal(true, ChampionEndpoint, ChampionStaticVersion, make([]string, 0, 0), make(map[string]string), &json)
 
+	if err != nil {
+		return err, champions
+	}
+
+	m := json.(map[string]interface{})
+
+	for name, d := range m {
+		data := d.(map[string]interface{})
+
+		champions = append(champions, *NewChampion(data["id"].(uint64), data["name"].(string), data["title"].(string)))
+	}
+
+	return nil, champions
 }
 
 //
 //	Get the champion with the specified ID
 //
-func GetChampionByID( id int ) ( error, Champion ) {
+func (r Riot) GetChampionByID( id int ) ( error, Champion ) {
 
 }
 
 //
 //	Get the champion with the specified name
 //
-func GetChampionByName( name string ) ( error, Champion ) {
+func (r Riot) GetChampionByName( name string ) ( error, Champion ) {
 
 }
 
